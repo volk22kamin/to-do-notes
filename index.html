@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css"/>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="modal-container " id="modal-container">
+        <div class="form-container" id="form-container">
+            <i id="close-note" class="fas fa-times"></i>
+            
+            <form id="form">
+                <div class="formInput">
+                    <label for="note">Add Note:</label>
+                    <textarea name="note" id="note" cols="30" rows="5"></textarea>
+                </div>
+                <div class="saveBtnCont">
+                    <button id="saveBtn" type="submit">SAVE</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- add notes -->
+    <div id="button-container">
+        <button id="add-note">Add Note</button>
+    </div>
+    <!-- note container -->
+    <div class="all-notes" id="all-notes">
+        
+    </div>
+    <!-- Script -->
+    <script src="script.js"></script>
+</body>
+</html>
