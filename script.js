@@ -12,7 +12,7 @@ const editIcon = document.getElementById('edit-icon');
 
 
 let notes = [];
-
+let isEdit = false;
 
 // open/ close the modal
 function closeModal(){
@@ -34,8 +34,22 @@ function deleteNote(id){
     localStorage.setItem('notes', JSON.stringify(notes));
     buildNoteContainer();
 }
+// save the edited note
+const saveChanges = (e, i) => {    
+    e.preventDefault();
+    console.log(i);
+    notes[1].content = modalTextContentEl.value;
+    localStorage.setItem('notes', JSON.stringify(notes));
+    notes = JSON.parse(localStorage.getItem('notes'));
+    console.log(notes);
+    buildNoteContainer();
+    isEdit = false;
+    closeModal();
+}
+
 // edit note
 const editNote = (time) => {
+    isEdit = true;
     let text = '';
     const len = notes.length;
     let i = 0;
@@ -47,7 +61,7 @@ const editNote = (time) => {
     }
     openModal();
     modalTextContentEl.textContent = text;
-    deleteNote(time);
+    
 }
 
 
@@ -67,6 +81,7 @@ function buildNoteContainer(){
         edit.classList.add('fas');
         edit.classList.add('fa-marker');
         edit.setAttribute('id', 'edit-icon');
+        edit.setAttribute('style', 'color: white');
         edit.setAttribute('onclick', `editNote('${note.time}')`);
         // i / x icon
         const i = document.createElement('i');
@@ -108,7 +123,8 @@ const storeData = (e) => {
     closeModal();
 }
 
-form.addEventListener('submit', storeData);
+
+form.addEventListener('submit', isEdit ? storeData : saveChanges);
 
 window.addEventListener('click', (e) => {
     if(e.target === modalContainer){
