@@ -13,13 +13,16 @@ const editIcon = document.getElementById('edit-icon');
 
 let notes = [];
 let isEdit = false;
+let toEdit = 0;
 
 // open/ close the modal
 function closeModal(){
     modalContainer.classList.remove('show-modal');
+    modalTextContentEl.value = '';
 }
 function openModal(){
     modalContainer.classList.add('show-modal');
+    modalTextContentEl.focus();
 }
 
 // deleting the note
@@ -35,13 +38,12 @@ function deleteNote(id){
     buildNoteContainer();
 }
 // save the edited note
-const saveChanges = (e, i) => {    
-    e.preventDefault();
-    console.log(i);
-    notes[1].content = modalTextContentEl.value;
+const saveChanges = (e) => {    
+    e.preventDefault(); 
+    notes[toEdit].content = modalTextContentEl.value;
+    console.log('saved',modalTextContentEl.value);
     localStorage.setItem('notes', JSON.stringify(notes));
     notes = JSON.parse(localStorage.getItem('notes'));
-    console.log(notes);
     buildNoteContainer();
     isEdit = false;
     closeModal();
@@ -49,6 +51,7 @@ const saveChanges = (e, i) => {
 
 // edit note
 const editNote = (time) => {
+    console.log('in edit');
     isEdit = true;
     let text = '';
     const len = notes.length;
@@ -56,11 +59,13 @@ const editNote = (time) => {
     for(i = 0; i < len; i++){
         if(notes[i].time === JSON.parse(time)){
             text = notes[i].content;
+            console.log(text);
+            toEdit = i;
             break;
         }
     }
+    modalTextContentEl.value = text;
     openModal();
-    modalTextContentEl.textContent = text;
     
 }
 
@@ -81,7 +86,6 @@ function buildNoteContainer(){
         edit.classList.add('fas');
         edit.classList.add('fa-marker');
         edit.setAttribute('id', 'edit-icon');
-        edit.setAttribute('style', 'color: white');
         edit.setAttribute('onclick', `editNote('${note.time}')`);
         // i / x icon
         const i = document.createElement('i');
@@ -106,6 +110,7 @@ function buildNoteContainer(){
 // store notes in local storage
 const storeData = (e) => {
     e.preventDefault();
+    console.log('storing');
     if(!modalTextContentEl.value) return false;
     const note = {
         time: Date.now(),
@@ -123,8 +128,12 @@ const storeData = (e) => {
     closeModal();
 }
 
+// event handler for dubmiting form
+const handler = (e) =>{
+    isEdit ? saveChanges(e) : storeData(e);
+}
 
-form.addEventListener('submit', isEdit ? storeData : saveChanges);
+form.addEventListener('submit', handler);
 
 window.addEventListener('click', (e) => {
     if(e.target === modalContainer){
