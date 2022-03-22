@@ -8,6 +8,7 @@ const modalContainer = document.getElementById('modal-container');
 const modalTextContentEl = document.getElementById('note');
 const form = document.getElementById('form');
 const allNotes = document.getElementById('all-notes');
+const editIcon = document.getElementById('edit-icon');
 
 
 let notes = [];
@@ -33,6 +34,22 @@ function deleteNote(id){
     localStorage.setItem('notes', JSON.stringify(notes));
     buildNoteContainer();
 }
+// edit note
+const editNote = (time) => {
+    let text = '';
+    const len = notes.length;
+    let i = 0;
+    for(i = 0; i < len; i++){
+        if(notes[i].time === JSON.parse(time)){
+            text = notes[i].content;
+            break;
+        }
+    }
+    openModal();
+    modalTextContentEl.textContent = text;
+    deleteNote(time);
+}
+
 
 // creating the notes from the local storage
 function buildNoteContainer(){
@@ -45,6 +62,12 @@ function buildNoteContainer(){
         const container = document.createElement('div');
         container.classList.add('container');
         container.setAttribute('id','note-container');
+        // edit
+        const edit = document.createElement('i');
+        edit.classList.add('fas');
+        edit.classList.add('fa-marker');
+        edit.setAttribute('id', 'edit-icon');
+        edit.setAttribute('onclick', `editNote('${note.time}')`);
         // i / x icon
         const i = document.createElement('i');
         i.classList.add('fas');
@@ -59,7 +82,7 @@ function buildNoteContainer(){
         h2.textContent = note.content;
 
         // appending
-        container.append(i,h2);
+        container.append(i,edit,h2);
         allNotes.appendChild(container);
     });
 
