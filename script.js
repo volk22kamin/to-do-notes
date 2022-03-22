@@ -37,7 +37,9 @@ function deleteNote(id){
 // creating the notes from the local storage
 function buildNoteContainer(){
     allNotes.textContent = '';
-    notes = JSON.parse(localStorage.getItem('notes'));
+    if(localStorage.getItem('notes')){
+        notes = JSON.parse(localStorage.getItem('notes'));
+    }
     notes.forEach((note) => {
         // div container
         const container = document.createElement('div');
@@ -64,7 +66,7 @@ function buildNoteContainer(){
 }
 
 // store notes in local storage
-function storeData(e){
+const storeData = (e) => {
     e.preventDefault();
     if(!modalTextContentEl.value) return false;
     const note = {
@@ -74,13 +76,8 @@ function storeData(e){
 
     if(localStorage.getItem('notes')){
         notes = JSON.parse(localStorage.getItem('notes'));
-        notes.push(note);
-    } else {
-        notes.push(note);
-        localStorage.setItem('notes', JSON.stringify(notes));
     }
- 
-    
+    notes.push(note);
     localStorage.setItem('notes', JSON.stringify(notes));
 
     buildNoteContainer();
